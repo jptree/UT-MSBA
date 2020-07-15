@@ -17,7 +17,6 @@ red_wine$type = 1
 red_white_df <- rbind(white_wine, red_wine)
 
 
-
 ########  K-MEANS CLUSTERING  ###########
 library(factoextra)
 library(gridExtra)
