@@ -1,8 +1,8 @@
 #Random comment by Matthew Leong to test.
 #Uh let's see
+#random comment by Lara
 
 #######  SETUP  ############
-#test3
 # Make randomness....consistent.
 set.seed(1337)
 
