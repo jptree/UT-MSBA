@@ -1,4 +1,4 @@
-
+# This shouldn't work
 #######  SETUP  ############
 # Make randomness....consistent.
 set.seed(1337)
@@ -15,6 +15,8 @@ red_wine$type = 1
 
 # Combines the white and red wine data frames together
 red_white_df <- rbind(white_wine, red_wine)
+
+
 
 
 ########  K-MEANS CLUSTERING  ###########
