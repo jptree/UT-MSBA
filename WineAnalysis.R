@@ -32,7 +32,7 @@ library(gridExtra)
 
 # This is the data frame that will be used to cluster the wine observations
 # The columns have arbitrarily been picked
-clustering_df <- white_wine[c('alcohol', 'pH', 'density', 'sulphates')]
+clustering_df <- red_wine[c('alcohol', 'quality')]
 
 # You must scale your data into the same range of values for this model
 clustering_df <- scale(clustering_df)
