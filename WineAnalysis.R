@@ -6,7 +6,6 @@
 # Test by Jason!
 #comment by shiru
 
-
 #######  SETUP  ############
 # Make randomness....consistent.
 set.seed(1337)
