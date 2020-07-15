@@ -1,6 +1,10 @@
+
 #Random comment by Matthew Leong to test.
 #Uh let's see
 #random comment by Lara
+#test comment by josh
+# Test by Jason!
+#comment by shiru
 
 #######  SETUP  ############
 # Make randomness....consistent.
@@ -20,6 +24,8 @@ red_wine$type = 1
 red_white_df <- rbind(white_wine, red_wine)
 
 
+
+
 ########  K-MEANS CLUSTERING  ###########
 library(factoextra)
 library(gridExtra)
@@ -27,7 +33,7 @@ library(gridExtra)
 
 # This is the data frame that will be used to cluster the wine observations
 # The columns have arbitrarily been picked
-clustering_df <- white_wine[c('alcohol', 'pH', 'density', 'sulphates')]
+clustering_df <- red_wine[c('alcohol', 'quality')]
 
 # You must scale your data into the same range of values for this model
 clustering_df <- scale(clustering_df)
