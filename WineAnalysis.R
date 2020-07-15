@@ -1,4 +1,10 @@
-# This shouldn't work
+
+#Random comment by Matthew Leong to test.
+#Uh let's see
+#random comment by Lara
+#test comment by josh
+# Test by Jason!
+
 #######  SETUP  ############
 # Make randomness....consistent.
 set.seed(1337)
