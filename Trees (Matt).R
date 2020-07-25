@@ -2,6 +2,9 @@
 ############################ Tree analysis ###############################
 ########################################################################## 
 
+#load in tree library
+library(tree)
+
 #The set up was taken from WineAnalysis.R
 # Make randomness....consistent.
 set.seed(1337)
@@ -96,9 +99,9 @@ text(prune_wine, pretty = 0)
 #First use the model to obtain predicted values
 predict_quality_prune = predict(prune_wine, #Use the pruned model
                               newdata = wine_test_df) #Use the test df which has remaining data.
-#find the root mean square error
-sqrt(mean((predict_quality_prune - wine_test_df$quality)^2))
-#Wait this (about 0.01895281) root mean square error's kinda good.
+#find the mean square error
+mean((predict_quality_prune - wine_test_df$quality)^2)
+#Wait this (about 0.584) root mean square error's kinda good.
 #This does make sense when looking at the variables earlier.
 #Most of the wine's are pretty similar since they're all Portuguse wine.
 #I'd imagine red or white doesn't make too much of a difference.
