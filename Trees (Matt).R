@@ -4,6 +4,7 @@
 
 #load in tree library
 library(tree)
+library(randomForest)
 
 #The set up was taken from WineAnalysis.R
 # Make randomness....consistent.
@@ -100,11 +101,16 @@ text(prune_wine, pretty = 0)
 predict_quality_prune = predict(prune_wine, #Use the pruned model
                               newdata = wine_test_df) #Use the test df which has remaining data.
 #find the mean square error
-mean((predict_quality_prune - wine_test_df$quality)^2)
+mse_simple <- mean((predict_quality_prune - wine_test_df$quality)^2)
+print(mse_simple)
 #Wait this (about 0.584) root mean square error's kinda good.
 #This does make sense when looking at the variables earlier.
 #Most of the wine's are pretty similar since they're all Portuguse wine.
 #I'd imagine red or white doesn't make too much of a difference.
+
+#RMSE conversion
+rmse_simple <- sqrt(mse_simple)
+print(rmse_simple)
 
 #Look at variable importance:
 #In contrast, the pruned model only ends up using three variables.
@@ -124,13 +130,16 @@ summary(prune_wine)
 #As it turns out trying to determine the best m is kinda computationally expensive.
 #hence the warning.
 
-# ###################     WARNING WILL TAKE A WHILE TO RUN###################################
-# #What I'm doing here is very computationally expensive.
-# #It will take a while to run.
-# #For that reason I've commentated this section out.
-# #If you want to try running it uncomment out this section.
-# #I've outputted the main important thing here as an image anyway. 
-#
+###################     WARNING WILL TAKE A WHILE TO RUN###################################
+#What I'm doing here is very computationally expensive.
+#It will take a while to run.
+#For that reason I've commentated this section out.
+#If you want to try running it uncomment out this section.
+#I've outputted the main important thing here as an image anyway.
+
+# #Load in random forest library if haven't already.
+# library(randomForest)
+# 
 # #Defining a function for finding MSE quickly
 # MSE_m <- function(m){
 #   set.seed(1337) #Sets the random seed for reproducible results
@@ -146,35 +155,38 @@ summary(prune_wine)
 #   return(mean((rf_predict_quality - wine_test_df$quality)^2)  )
 # }
 # 
-# #Use a for loop to iterate over all possible values of predictors. 
+# #Use a for loop to iterate over all possible values of predictors.
 # #I'm creating a plot here to visualize the data
 # #Load in library ggplot2 cause base R plots suck.
 # library(ggplot2)
 # 
 # #Create an empty list for the number of variables m chosen.
 # m_list = c()
-# #Create an empty list for MSE associated with m
-# m_mse_list = c()
+# #Create an empty list for RMSE associated with m
+# m_rmse_list = c()
 # for(i in 1:ncol(red_white_df)){ #Test out the number of variables.
 #   m_list[i] <- i #Store the number of variable to the list.
-#   m_mse_list[i] <- MSE_m(i) #Get the MSE of the associated m.
+#   m_rmse_list[i] <- sqrt(MSE_m(i)) #Get the RMSE of the associated m.
 # }
 # #create a dataframe using the lists as indices
-# m_mse_df <- data.frame(x = m_list,y = m_mse_list) 
+# m_rmse_df <- data.frame(x = m_list,y = m_rmse_list)
 # 
 # #Plot the df
 # #plot this dataframe
 # #put points in the plot
 # #add in the x-axis
-# ggplot(m_mse_df,aes(x,y)) + geom_point() + xlab('Number of m variables') + ylab('MSE obtained from RF model')
+# ggplot(m_rmse_df,aes(x,y)) + geom_point() + xlab('Number of m variables') + ylab('RMSE obtained from RF model')
 # 
 # #From the plot we can see that the optimal number of m variables for the random forest
 # # is 4.
-# 
+
 
 ##########################################################################
 ###################### For four Random Forest Model ######################
 ########################################################################## 
+
+#load in the random forest library
+library(randomForest)
 
 #Now that we determined our optimal m is 4. Let's actually build the model.
 rf_wine = randomForest(quality~., #Predict quality using every variables
@@ -196,13 +208,16 @@ cat('RMSE: ',rf_wine_pred_rmse,'\n')
 par(mfrow = c(1,1)) #Plot window: 1 row, 1 column
 plot(wine_test_df$quality,rf_wine_pred, #Scatterplot for quality of the fit
      xlab='Test Data quality',ylab='Random Forest prediction')
-abline(0,1,col='red',lwd=2)
+
 
 par(mfrow = c(1,1)) #Plot window: 1 row, 1 column
 #Plot variable importance
 varImpPlot(rf_wine)
 #If we look at the plot, we can see the visual representation of what's good and bad.
 #Basically Alcohol - Volatile Acidity - Free Sulphur dioxide - Sulphates - pH - residual.sugar
+
+plot(rf_wine)
+text(rf_wine, pretty = '0')
 
 ##########################################################################
 ###################### Boosted Model #####################################
@@ -216,14 +231,14 @@ boost_wine = gbm(quality~., #Predict quality using all the predictors.
                     data= wine_train_value_df, #Use the train-value dataframe
                     distribution= 'gaussian', #Use a Gaussian distribution 
                     # since it is a regression problem.
-                    shrinkage = 0.2, #Use 0.2 for shrinkage
-                    n.trees =100) #Use 100 trees 
+                    shrinkage = 0.01, #Use 0.01 for shrinkage
+                    n.trees =1000) #Use 1000 trees 
 #Use summary to get importance
 summary(boost_wine)
 #Boosted model gives us alcohol, volatile.acidity, free.sulfur.dioxide in that order.
 yhat_boost = predict(boost_wine, newdata = wine_test_df)
 
-mean((yhat_boost-wine_test_df$quality)^2)
-#MSE for this boosted model is worse.
+sqrt(mean((yhat_boost-wine_test_df$quality)^2))
+#RMSE for this boosted model is worse.
 #I'll stop here for now and explore if we can improve the boosted model later.
 
