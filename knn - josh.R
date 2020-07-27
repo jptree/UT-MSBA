@@ -41,6 +41,8 @@ plot(red_white_df$alcohol.rescaled, red_white_df$quality.rescaled, pch=19)
 plot(red_white_df$sulphates.rescaled, red_white_df$quality.rescaled, pch=19)
 plot(red_white_df$residual.sugar.rescaled, red_white_df$quality.rescaled, pch=19)
 
+#std of quality
+sd(red_white_df$quality)
 
 #Organizing the data in a training df
 train = data.frame(red_white_df$alcohol,red_white_df$quality)
@@ -97,9 +99,9 @@ text(log(1/kk[1]),sqrt(MSE[1])+0.3, #coordinates
      paste("k=",kk[1]), #the actual text
      col=2, #Color of the text
      cex=1.2) #Size of the text
-text(log(1/kk[2])+0.4,sqrt(MSE[2]),paste("k=",kk[2]),col=2,cex=1.2)
-text(log(1/kk[5])+0.4,sqrt(MSE[5]),paste("k=",kk[5]),col=2,cex=1.2)
-text(log(1/kk[10])+0.4,sqrt(MSE[10]),paste("k=",kk[10]),col=2,cex=1.2)
+text(log(1/kk[2]),sqrt(MSE[2]),paste("k=",kk[2]),col=2,cex=1.2)
+text(log(1/kk[5])+0.4,sqrt(MSE[5])+0.05,paste("k=",kk[5]),col=2,cex=1.2)
+text(log(1/kk[10])+0.4,sqrt(MSE[10])+0.05,paste("k=",kk[10]),col=2,cex=1.2)
 
 ###########Out of Sample Prediction############
 
@@ -187,11 +189,11 @@ data_df = data.frame(lstat,medv)
 
 #Define the number of folds
 kcv = 10 #In this case, 10-fold cross validation
-#This k has nothing to do with the k from knn
 
-#Size of the fold (which is the number of elements in the test matrix)
+
+#Size of the fold 
 n0 = round(n/kcv, #Number of observations in the fold
-           0) #Rounding with 0 decimals
+           0) 
 
 #Number of neighbors for different models
 kk <- 1:450
@@ -206,6 +208,9 @@ used = NULL
 
 #The set of indices not used (will be updated removing the used)
 set = 1:n
+
+##### WARNING #####
+#I could not get the code to run for a k in a range that skipped values so to run this whole model will take about an hour
 
 for(j in 1:kcv){
   
@@ -248,7 +253,7 @@ for(j in 1:kcv){
   cat(j,"folds out of",kcv,'\n')
 }
 
-warnings()
+
 #Calculate the mean of MSE for each k
 mMSE = apply(out_MSE, #Receive a matrix
              2, #Takes its columns (it would take its rows if this argument was 1)
