@@ -1,3 +1,5 @@
+__author__ = "Jason Petri"
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -6,11 +8,11 @@ import itertools
 import random
 
 
-
 for i in range(5):  # Arbitrarily run this analysis for 5 different random subsets.
 
     stock_data = pd.read_csv('Data.csv', index_col=0)
-    tickers_list = random.sample(list(stock_data.columns), 7)  # careful tweaking this number. This becomes computationally expensive
+    tickers_list = random.sample(list(stock_data.columns), 15)  # careful tweaking this number.
+    # This becomes computationally expensive
     n_port_stdev = {}
 
 
@@ -25,7 +27,8 @@ for i in range(5):  # Arbitrarily run this analysis for 5 different random subse
 
     for L in range(1, len(tickers_list) + 1):
         port_variances_at_n = []
-        for subset in itertools.permutations(tickers_list, L):
+        for subset in itertools.combinations(tickers_list, L):
+            # print(subset)
             l_subset = list(subset)
             port_val = calculate_portfolio_variance(l_subset, stock_data)
             port_variances_at_n.append(port_val)
