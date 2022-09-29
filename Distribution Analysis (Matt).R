@@ -48,9 +48,3 @@ sd(redwine$quality)
 
 
 
-mean(whitewine$quality)
-sd(whitewine$quality)
-
-
-
-
